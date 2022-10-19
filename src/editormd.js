@@ -48,7 +48,7 @@
     
     editormd.title        = editormd.$name = "Editor.md";
     editormd.version      = "1.5.0";
-    editormd.homePage     = "https://pandao.github.io/editor.md/";
+    editormd.homePage     = "https://github.com/Deali-Axy/editor.md";
     editormd.classPrefix  = "editormd-";
     
     editormd.toolbarModes = {
@@ -4027,9 +4027,46 @@
         div.getMarkdown = function() {            
             return saveTo.val();
         };
+
+        div.markdownToc = markdownToC;
+        div.markdownTocTree = editormd.tocListToTree(markdownToC)
         
         return div;
     };
+
+    class TocNode {
+        constructor(text, href, tags, nodes) {
+            this.text = text
+            this.href = href
+            this.tags = tags
+            this.nodes = nodes
+        }
+    }
+
+    editormd.tocListToTree = function (tocList) {
+        let toc = tocList
+        for (let i = 0; i < toc.length; i++) {
+            let item = toc[i]
+            item.id = i
+            item.pid = -1
+            for (let j = i; j >= 0; j--) {
+                let preItem = toc[j]
+                if (item.level === preItem.level + 1) {
+                    item.pid = j
+                    break
+                }
+            }
+        }
+
+        function getNodes(pid = -1) {
+            let nodes = toc.filter(item => item.pid === pid)
+            if (nodes.length === 0) return null
+
+            return nodes.map(item => new TocNode(item.text, `#${item.text}`, null, getNodes(item.id)))
+        }
+
+        return getNodes()
+    }
     
     // Editor.md themes, change toolbar themes etc.
     // added @1.5.0

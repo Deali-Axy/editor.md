@@ -1,7 +1,7 @@
 {
-  "name": "editor.md",
-  "version": "1.5.0",
-  "description": "Open source online markdown editor.",
+  "name": "editor.md-ext",
+  "version": "1.5.1",
+  "description": "Open source online markdown editor.(add toc_list to toc_tree)",
   "directories": {
     "doc": "docs",
     "example": "examples",
@@ -12,19 +12,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/pandao/editor.md.git"
+    "url": "https://github.com/Deali-Axy/editor.md.git"
   },
   "keywords": [
     "editor.md",
     "markdown",
     "editor"
   ],
-  "author": "Pandao",
+  "author": "DealiAxy",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/pandao/editor.md/issues"
+    "url": "https://github.com/Deali-Axy/editor.md/issues"
   },
-  "homepage": "https://github.com/pandao/editor.md",
+  "homepage": "https://github.com/Deali-Axy/editor.md",
   "devDependencies": {
     "dateformatter": "^0.1.0",
     "gulp": "^3.8.11",
