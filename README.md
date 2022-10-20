@@ -1,30 +1,86 @@
 # Editor.md
 
-![](https://pandao.github.io/editor.md/images/logos/editormd-logo-180x180.png)
+在原版的基础上，优化 ToC 渲染效果，且支持与 [Bootstrap5-Treeview](https://github.com/Deali-Axy/bootstrap5-treeview) 组件搭配以显示文章目录~
 
-![](https://img.shields.io/github/stars/pandao/editor.md.svg)
-![](https://img.shields.io/github/forks/pandao/editor.md.svg)
-![](https://img.shields.io/github/tag/pandao/editor.md.svg)
-![](https://img.shields.io/github/release/pandao/editor.md.svg)
-![](https://img.shields.io/github/issues/pandao/editor.md.svg)
-![](https://img.shields.io/bower/v/editor.md.svg)
+## 使用方法
 
-**Editor.md** : The open source embeddable online markdown editor (component), based on CodeMirror & jQuery & Marked.
+先安装我发布的NPM包
 
-### Features
+```bash
+// 魔改的 editor.md 组件
+npm i editor.md-ext
+// 魔改的树形列表组件
+npm i bootstrap5-treeview
+```
 
-- Support Standard Markdown / CommonMark and GFM (GitHub Flavored Markdown);
-- Full-featured: Real-time Preview, Image (cross-domain) upload, Preformatted text/Code blocks/Tables insert, Code fold, Search replace, Read only, Themes, Multi-languages, L18n, HTML entities, Code syntax highlighting...;
-- Markdown Extras : Support [ToC (Table of Contents)](https://pandao.github.io/editor.md/examples/toc.html), [Emoji](https://pandao.github.io/editor.md/examples/emoji.html), [Task lists](https://pandao.github.io/editor.md/examples/task-lists.html), [@Links](https://pandao.github.io/editor.md/examples/@links.html)...;
-- Compatible with all major browsers (IE8+), compatible Zepto.js and iPad;
-- Support [decode & fliter of the HTML tags & attributes](https://pandao.github.io/editor.md/examples/html-tags-decode.html);
-- Support [TeX (LaTeX expressions, Based on KaTeX)](https://pandao.github.io/editor.md/examples/katex.html), [Flowchart](https://pandao.github.io/editor.md/examples/flowchart.html) and [Sequence Diagram](https://pandao.github.io/editor.md/examples/sequence-diagram.html) of Markdown extended syntax;
-- Support AMD/CMD (Require.js & Sea.js) Module Loader, and Custom/define editor plugins;
+页面上引入 CSS
 
-[README & Examples (English)](https://pandao.github.io/editor.md/en.html)
-  
+```html
+<link rel="stylesheet" href="~/lib/editormd/css/editormd.preview.css">
+```
 
---------
+引入 JS
+
+```html
+<!-- jQuery -->
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+<!-- 树形列表组件 -->
+<script src="~/js/bootstrap-treeview.js"></script>
+
+<!-- editor.md 需要的依赖 -->
+<script src="~/lib/editormd/lib/marked.min.js"></script>
+<script src="~/lib/editormd/lib/prettify.min.js"></script>
+<script src="~/lib/editormd/lib/raphael.min.js"></script>
+<script src="~/lib/editormd/lib/underscore.min.js"></script>
+<script src="~/lib/editormd/lib/sequence-diagram.min.js"></script>
+<script src="~/lib/editormd/lib/flowchart.min.js"></script>
+<script src="~/lib/editormd/lib/jquery.flowchart.min.js"></script>
+<script src="~/lib/editormd/editormd.js"></script>
+```
+
+准备一个 div 作为目录容器
+
+```html
+<div id="post-toc-container"></div>
+```
+
+准备一个 div 存放文章内容，把 Markdown 内容放进这个 textarea 里面。
+
+```html
+<div id="post-markdown-content" class="post-content">
+    <textarea style="display:none;">@Model.Content</textarea>
+</div>
+```
+
+写一段 JS 代码来启用渲染
+
+```js
+$(function () {
+    // 渲染文章
+    let editorMdView = editormd.markdownToHTML("post-markdown-content", {
+        htmlDecode: true,
+        tocm: true,    // Using [TOCM]
+        emoji: true,
+        taskList: true,
+        tex: true,  // 默认不解析
+        flowChart: true,  // 默认不解析
+        sequenceDiagram: true,  // 默认不解析
+    });
+
+    // 渲染目录
+    $('#post-toc-container').treeview({
+        data: editorMdView.markdownTocTree,
+        levels: 2,
+        enableLinks: true,
+        highlightSelected: false,
+        showTags: true,
+    })
+})
+```
+
+关于树形列表组件的用法可以看我的 GitHub ：https://github.com/Deali-Axy/bootstrap5-treeview
+
 
 **Editor.md** 是一款开源的、可嵌入的 Markdown 在线编辑器（组件），基于 CodeMirror、jQuery 和 Marked 构建。
 
