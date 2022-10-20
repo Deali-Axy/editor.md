@@ -1,7 +1,7 @@
 {
   "name": "editor.md-ext",
-  "version": "1.5.2",
-  "description": "Open source online markdown editor.(add toc_list to toc_tree)",
+  "version": "1.5.3",
+  "description": "Open source online markdown editor. / 魔改支持对TOC进行进一步定制",
   "directories": {
     "doc": "docs",
     "example": "examples",
