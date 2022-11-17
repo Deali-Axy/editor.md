@@ -14,3 +14,4 @@ examples/uploads/**/*
 .project
 .url
 css/*.map
+yarn.lock

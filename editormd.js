@@ -1,13 +1,13 @@
 /*
- * Editor.md
+ * Editor.md-ext
  *
  * @file        editormd.js 
- * @version     v1.5.0 
- * @description Open source online markdown editor.
+ * @version     v1.5.4 
+ * @description Open source online markdown editor. / 魔改支持对TOC进行进一步定制
  * @license     MIT License
- * @author      Pandao
- * {@link       https://github.com/pandao/editor.md}
- * @updateTime  2015-06-09
+ * @author      DealiAxy
+ * {@link       https://github.com/Deali-Axy/editor.md}
+ * @updateTime  2022-11-17
  */
 
 ;(function(factory) {
@@ -60,7 +60,7 @@
     
     editormd.title        = editormd.$name = "Editor.md";
     editormd.version      = "1.5.0";
-    editormd.homePage     = "https://pandao.github.io/editor.md/";
+    editormd.homePage     = "https://github.com/Deali-Axy/editor.md";
     editormd.classPrefix  = "editormd-";
     
     editormd.toolbarModes = {
@@ -365,7 +365,7 @@
             
             var _this            = this;
             var classPrefix      = this.classPrefix  = editormd.classPrefix; 
-            var settings         = this.settings     = $.extend(true, {}, editormd.defaults, options);
+            var settings         = this.settings     = $.extend(true, editormd.defaults, options);
             
             id                   = (typeof id === "object") ? settings.id : id;
             
@@ -1965,15 +1965,14 @@
         
         save : function() {
             
-            var _this            = this;
-            var state            = this.state;
-            var settings         = this.settings;
-
-            if (timer === null && !(!settings.watch && state.preview))
+            if (timer === null)
             {
                 return this;
             }
             
+            var _this            = this;
+            var state            = this.state;
+            var settings         = this.settings;
             var cm               = this.cm;            
             var cmValue          = cm.getValue();
             var previewContainer = this.previewContainer;
@@ -3183,17 +3182,20 @@
         }
     };
     
+    var isMac = navigator.platform.toUpperCase().indexOf('MAC')>=0;
+    var key = isMac ? "Cmd" : "Ctrl";
+    
     editormd.keyMaps = {
-        "Ctrl-1"       : "h1",
-        "Ctrl-2"       : "h2",
-        "Ctrl-3"       : "h3",
-        "Ctrl-4"       : "h4",
-        "Ctrl-5"       : "h5",
-        "Ctrl-6"       : "h6",
-        "Ctrl-B"       : "bold",  // if this is string ==  editormd.toolbarHandlers.xxxx
-        "Ctrl-D"       : "datetime",
+        [key + "-1"]       : "h1",
+        [key + "-2"]       : "h2",
+        [key + "-3"]       : "h3",
+        [key + "-4"]       : "h4",
+        [key + "-5"]       : "h5",
+        [key + "-6"]       : "h6",
+        [key + "-B"]       : "bold",  // if this is string ==  editormd.toolbarHandlers.xxxx
+        [key + "-D"]       : "datetime",
         
-        "Ctrl-E"       : function() { // emoji
+        [key + "Ctrl-E"]       : function() { // emoji
             var cm        = this.cm;
             var cursor    = cm.getCursor();
             var selection = cm.getSelection();
@@ -3210,10 +3212,10 @@
                 cm.setCursor(cursor.line, cursor.ch + 1);
             }
         },
-        "Ctrl-Alt-G"   : "goto-line",
-        "Ctrl-H"       : "hr",
-        "Ctrl-I"       : "italic",
-        "Ctrl-K"       : "code",
+        [key + "-Alt-G"]   : "goto-line",
+        [key + "-H"]       : "hr",
+        [key + "-I"]       : "italic",
+        [key + "-K"]       : "code",
         
         "Ctrl-L"        : function() {
             var cm        = this.cm;
@@ -3228,7 +3230,7 @@
                 cm.setCursor(cursor.line, cursor.ch + 1);
             }
         },
-        "Ctrl-U"         : "list-ul",
+        [key + "-U"]         : "list-ul",
         
         "Shift-Ctrl-A"   : function() {
             var cm        = this.cm;
@@ -3248,10 +3250,10 @@
             }
         },
         
-        "Shift-Ctrl-C"     : "code",
-        "Shift-Ctrl-Q"     : "quote",
-        "Shift-Ctrl-S"     : "del",
-        "Shift-Ctrl-K"     : "tex",  // KaTeX
+        ["Shift" + key + "-C"]     : "code",
+        ["Shift" + key + "Q"]     : "quote",
+        ["Shift" + key + "S"]     : "del",
+        ["Shift" + key + "K"]     : "tex",  // KaTeX
         
         "Shift-Alt-C"      : function() {
             var cm        = this.cm;
@@ -3265,16 +3267,16 @@
             } 
         },
         
-        "Shift-Ctrl-Alt-C" : "code-block",
-        "Shift-Ctrl-H"     : "html-entities",
-        "Shift-Alt-H"      : "help",
-        "Shift-Ctrl-E"     : "emoji",
-        "Shift-Ctrl-U"     : "uppercase",
-        "Shift-Alt-U"      : "ucwords",
-        "Shift-Ctrl-Alt-U" : "ucfirst",
-        "Shift-Alt-L"      : "lowercase",
+        ["Shift-" + key + "-Alt-C"]      : "code-block",
+        ["Shift-" + key + "-H"]          : "html-entities",
+        "Shift-Alt-H"                    : "help",
+        ["Shift-" + key + "-E"]          : "emoji",
+        ["Shift-" + key + "-U"]          : "uppercase",
+        "Shift-Alt-U"                    : "ucwords",
+        ["Shift-" + key + "-Alt-U"]      : "ucfirst",
+        "Shift-Alt-L"                    : "lowercase",
         
-        "Shift-Ctrl-I"     : function() {
+        ["Shift-" + key + "-I"]          : function() {
             var cm        = this.cm;
             var cursor    = cm.getCursor();
             var selection = cm.getSelection();
@@ -3288,15 +3290,15 @@
             }
         },
         
-        "Shift-Ctrl-Alt-I" : "image",
-        "Shift-Ctrl-L"     : "link",
-        "Shift-Ctrl-O"     : "list-ol",
-        "Shift-Ctrl-P"     : "preformatted-text",
-        "Shift-Ctrl-T"     : "table",
-        "Shift-Alt-P"      : "pagebreak",
-        "F9"               : "watch",
-        "F10"              : "preview",
-        "F11"              : "fullscreen",
+        ["Shift-" + key + "-Alt-I"]     : "image",
+        ["Shift-" + key + "-L"]         : "link",
+        ["Shift-" + key + "-O"]         : "list-ol",
+        ["Shift-" + key + "-P"]         : "preformatted-text",
+        ["Shift-" + key + "-T"]         : "table",
+        "Shift-Alt-P"                   : "pagebreak",
+        "F9"                            : "watch",
+        "F10"                           : "preview",
+        "F11"                           : "fullscreen",
     };
     
     /**
@@ -3356,7 +3358,7 @@
         email         : /(\w+)@(\w+)\.(\w+)\.?(\w+)?/g,
         emailLink     : /(mailto:)?([\w\.\_]+)@(\w+)\.(\w+)\.?(\w+)?/g,
         emoji         : /:([\w\+-]+):/g,
-        emojiDatetime : /(\d{2}:\d{2}:\d{2})/g,
+        emojiDatetime : /(\d{1,2}:\d{1,2}:\d{1,2})/g,
         twemoji       : /:(tw-([\w]+)-?(\w+)?):/g,
         fontAwesome   : /:(fa-([\w]+)(-(\w+)){0,}):/g,
         editormdLogo  : /:(editormd-logo-?(\w+)?):/g,
@@ -3365,7 +3367,7 @@
 
     // Emoji graphics files url path
     editormd.emoji     = {
-        path  : "https://www.webpagefx.com/tools/emoji-cheat-sheet/graphics/emojis/",
+        path  : "http://www.emoji-cheat-sheet.com/graphics/emojis/",
         ext   : ".png"
     };
 
@@ -4037,9 +4039,46 @@
         div.getMarkdown = function() {            
             return saveTo.val();
         };
+
+        div.markdownToc = markdownToC;
+        div.markdownTocTree = editormd.tocListToTree(markdownToC)
         
         return div;
     };
+
+    class TocNode {
+        constructor(text, href, tags, nodes) {
+            this.text = text
+            this.href = href
+            this.tags = tags
+            this.nodes = nodes
+        }
+    }
+
+    editormd.tocListToTree = function (tocList) {
+        let toc = tocList
+        for (let i = 0; i < toc.length; i++) {
+            let item = toc[i]
+            item.id = i
+            item.pid = -1
+            for (let j = i; j >= 0; j--) {
+                let preItem = toc[j]
+                if (item.level === preItem.level + 1) {
+                    item.pid = j
+                    break
+                }
+            }
+        }
+
+        function getNodes(pid = -1) {
+            let nodes = toc.filter(item => item.pid === pid)
+            if (nodes.length === 0) return null
+
+            return nodes.map(item => new TocNode(item.text, `#${item.text}`, null, getNodes(item.id)))
+        }
+
+        return getNodes()
+    }
     
     // Editor.md themes, change toolbar themes etc.
     // added @1.5.0
